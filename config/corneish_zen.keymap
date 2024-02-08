@@ -33,12 +33,12 @@
 // -----------------------------------------------------------------------------------------
 // |  ESC |   1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  |  DEL  |
 // | CTRL |   !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  |  `  |
-// | SHFT | snip |     |     |  _ |  -  |   |  +  |  {  |  }  |  [  |  ]  |  \  |
+// | SHFT | snip |     |     |  _  |  -  |   |  +  |  [  |  ]  |  {  |  }  |  \  |
 //                     | LALT | SPC | SYM |   | FUNC / ENTER | SPC  | RALT |
                         bindings = <
    &kp ESC   &kp N1             &kp N2  &kp N3    &kp N4    &kp N5               &kp N6    &kp N7   &kp N8   &kp N9   &kp N0   &kp DEL
    &kp LCTRL &kp EXCL           &kp AT  &kp HASH  &kp DLLR  &kp PRCNT            &kp CARET &kp AMPS &kp STAR &kp LPAR &kp RPAR &kp GRAVE
-   &kp LSHFT &kp LG(LC(LS(N4))) &trans  &trans    &kp UNDER &kp MINUS            &kp EQUAL &kp LBRC &kp RBRC &kp LBKT &kp RBKT &kp BSLH
+   &kp LSHFT &kp LG(LC(LS(N4))) &trans  &trans    &kp UNDER &kp MINUS            &kp EQUAL &kp LBKT & kp RBKT & kp LBRC & kp RBRC & kp BSLH
                                         &trans    &kp SPACE &trans               &trans &kp SPACE &trans 
                         >;
                 };
@@ -46,7 +46,7 @@
                 raise_layer {
                         label = "FUNC";
 // -----------------------------------------------------------------------------------------
-// |  F1 |  F2  |  F3  |  F4  |  F5  |  F6  |   | PGUP  | PGDN |  Home   |  END  |    |       |
+// | F1 |  F2  |  F3  |  F4  |  F5  |  F6  |   | PGUP  | PGDN |  Home   |  END  |    |       |
 // | F7 |  F8  |  F9  |  F10  |  F11  |  F12  |   | LEFT | UP  |  DWN  | RGHT  |   \   |   `   |
 // | SHFT |  BT0 |  BT1 |  BT2 | BT3 | BT CLR |   |    | <-   |  sk shift   |  ->  | CLOCK | CWORD |
 //                          | LALT | SPC | SYM |   | FUNC / ENTER | SPC  | RALT |
