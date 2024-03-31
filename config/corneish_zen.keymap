@@ -1,61 +1,109 @@
 #include <behaviors.dtsi>
-#include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
 
 / {
-  chosen {
-    zmk,matrix_transform = &default_transform;
-    //zmk,matrix_transform = &five_column_transform;
-  };
+    chosen {
+        zmk,matrix_transform = &default_transform;
+
+        //zmk,matrix_transform = &five_column_transform;
+    };
 };
 
 / {
-        keymap {
-                compatible = "zmk,keymap";
+    behaviors {
+        homerow: homerow {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW";
+            bindings = <&kp>, <&kp>;
 
-                default_layer {
-                        label = "QWERTY";
-// -----------------------------------------------------------------------------------------
-// | TAB  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BKSP |
-// | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
-// | SHFT |  Z  |  X (GUI)  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  / (GUI)  | SHFT |
-//                          | LALT | SPC | SYM |   | FUNC / ENTER | SPC  | RALT |
-                        bindings = <
-   &kp TAB   &kp Q &kp W &kp E &kp R &kp T   &kp Y   &kp U  &kp I     &kp O   &kp P         &kp BSPC
-   &kp LCTRL &kp A &kp S &kp D &kp F &kp G   &kp H   &kp J  &kp K     &kp L   &kp SEMI      &kp SQT
-   &kp LSHFT &kp Z &kp X &kp C &kp V &kp B   &kp N   &kp M  &kp COMMA &kp DOT &mt RGUI FSLH &kp RSHFT
-                        &kp LALT &kp SPACE &mo 1  &lt 2 RET &kp SPACE &kp LGUI
-                        >;
-                };
-
-                lower_layer {
-                        label = "SYMBOL";
-// -----------------------------------------------------------------------------------------
-// |  ESC |   1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  |  DEL  |
-// | CTRL |   !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  |  `  |
-// | SHFT | snip |     |     |  _  |  -  |   |  +  |  [  |  ]  |  {  |  }  |  \  |
-//                     | LALT | SPC | SYM |   | FUNC / ENTER | SPC  | RALT |
-                        bindings = <
-   &kp ESC   &kp N1             &kp N2  &kp N3    &kp N4    &kp N5               &kp N6    &kp N7   &kp N8   &kp N9   &kp N0   &kp DEL
-   &kp LCTRL &kp EXCL           &kp AT  &kp HASH  &kp DLLR  &kp PRCNT            &kp CARET &kp AMPS &kp STAR &kp LPAR &kp RPAR &kp GRAVE
-   &kp LSHFT &kp LG(LC(LS(N4))) &trans  &trans    &kp UNDER &kp MINUS            &kp EQUAL &kp LBKT &kp RBKT &kp LBRC &kp RBRC &kp BSLH
-                                        &trans    &kp SPACE &trans               &trans &kp SPACE &trans 
-                        >;
-                };
-
-                raise_layer {
-                        label = "FUNC";
-// -----------------------------------------------------------------------------------------
-// | F1 |  F2  |  F3  |  F4  |  F5  |  F6  |   | PGUP  | PGDN |  Home   |  END  |    |       |
-// | F7 |  F8  |  F9  |  F10  |  F11  |  F12  |   | LEFT | UP  |  DWN  | RGHT  |   \   |   `   |
-// | SHFT |  BT0 |  BT1 |  BT2 | BT3 | BT CLR |   |    | <-   |  sk shift   |  ->  | CLOCK | CWORD |
-//                          | LALT | SPC | SYM |   | FUNC / ENTER | SPC  | RALT |
-                        bindings = <
-   &kp F1    &kp F2       &kp F3       &kp F4       &kp F5        &kp F6                &kp PG_UP &kp PG_DN      &kp HOME     &kp END       &trans    &trans
-   &kp F7    &kp F8       &kp F9       &kp F10      &kp F11       &kp F12               &kp LEFT  &kp UP        &kp DOWN   &kp RIGHT     &kp BSLH  &kp GRAVE
-   &kp LSHFT &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3  &bt BT_CLR            &trans    &kp LA(LEFT)  &sk LSHIFT &kp LA(RIGHT) &kp LCAPS &caps_word
-                    	               &trans       &kp SPACE     &trans                &trans    &kp SPACE     &trans
-                        >;
-                };
+            #binding-cells = <2>;
+            tapping-term-ms = <240>;
+            flavor = "tap-preferred";
+            quick-tap-ms = <200>;
+            require-prior-idle-ms = <160>;
+            hold-trigger-key-positions = <36 38 37 39 40 41>;
+            hold-trigger-on-release;
         };
+
+        index: index {
+            compatible = "zmk,behavior-hold-tap";
+            label = "INDEX";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            hold-trigger-on-release;
+            hold-trigger-key-positions = <36 37 38 39 40 41>;
+            tapping-term-ms = <180>;
+            require-prior-idle-ms = <100>;
+            quick-tap-ms = <300>;
+        };
+
+        thumb: thumb {
+            compatible = "zmk,behavior-hold-tap";
+            label = "THUMB";
+            bindings = <&mo>, <&kp>;
+
+            #binding-cells = <2>;
+            flavor = "balanced";
+            quick-tap-ms = <300>;
+            tapping-term-ms = <200>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            label = "QWERTY";
+
+            // -----------------------------------------------------------------------------------------
+            // | TAB  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BKSP |
+            // | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
+            // | SHFT |  Z  |  X (GUI)  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  / (GUI)  | SHFT |
+            //                          | LALT | SPC | SYM |   | FUNC / ENTER | SPC  | RALT |
+
+            bindings = <
+&kp GRAVE  &kp Q            &kp W            &kp E                    &kp R               &kp T              &kp Y           &kp U            &kp I             &kp O            &kp P               &kp BACKSLASH
+&kp LCTRL  &homerow LGUI A  &homerow LALT S  &homerow LEFT_CONTROL D  &index LSHFT F      &kp G              &kp H           &index RSHIFT J  &homerow RCTRL K  &homerow RALT L  &homerow RGUI SEMI  &kp SQT
+&kp LSHFT  &kp Z            &kp X            &kp C                    &kp V               &kp B              &kp N           &kp M            &kp COMMA         &kp DOT          &kp SLASH           &kp RSHFT
+                                             &kp DEL                  &thumb 1 BACKSPACE  &thumb 1 ESCAPE    &thumb 2 ENTER  &kp SPACE        &kp TAB
+            >;
+        };
+
+        lower_layer {
+            label = "SYMBOL";
+
+            // -----------------------------------------------------------------------------------------
+            // |  ESC |   1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  |  DEL  |
+            // | CTRL |   !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  |  `  |
+            // | SHFT | snip |     |     |  _  |  -  |   |  +  |  [  |  ]  |  {  |  }  |  \  |
+            //                     | LALT | SPC | SYM |   | FUNC / ENTER | SPC  | RALT |
+
+            bindings = <
+&kp EQUAL  &kp N1              &kp N2  &kp N3    &kp N4     &kp N5       &kp N6      &kp N7     &kp N8            &kp N9                 &kp N0    &kp MINUS
+&kp LCTRL  &kp EXCL            &kp AT  &kp HASH  &kp DLLR   &kp PRCNT    &kp CARET   &kp AMPS   &kp STAR          &kp LPAR               &kp RPAR  &kp GRAVE
+&kp LSHFT  &kp LG(LC(LS(N4)))  &trans  &trans    &kp UNDER  &kp MINUS    &kp LS(N9)  &kp LBKT   &kp LEFT_BRACKET  &kp LS(RIGHT_BRACKET)  &kp RBRC  &kp BSLH
+                                       &trans    &kp SPACE  &trans       &trans      &kp SPACE  &trans
+            >;
+        };
+
+        raise_layer {
+            label = "FUNC";
+
+            // -----------------------------------------------------------------------------------------
+            // | F1 |  F2  |  F3  |  F4  |  F5  |  F6  |   | PGUP  | PGDN |  Home   |  END  |    |       |
+            // | F7 |  F8  |  F9  |  F10  |  F11  |  F12  |   | LEFT | UP  |  DWN  | RGHT  |   \   |   `   |
+            // | SHFT |  BT0 |  BT1 |  BT2 | BT3 | BT CLR |   |    | <-   |  sk shift   |  ->  | CLOCK | CWORD |
+            //                          | LALT | SPC | SYM |   | FUNC / ENTER | SPC  | RALT |
+
+            bindings = <
+&kp F1     &kp F2        &kp F3        &kp F4        &kp F5        &kp F6        &kp PG_UP  &kp PG_DN     &kp HOME    &kp END        &trans     &trans
+&kp F7     &kp F8        &kp F9        &kp F10       &kp F11       &kp F12       &kp LEFT   &kp UP        &kp DOWN    &kp RIGHT      &kp BSLH   &kp GRAVE
+&kp LSHFT  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_CLR    &trans     &kp LA(LEFT)  &sk LSHIFT  &kp LA(RIGHT)  &kp LCAPS  &caps_word
+                                       &trans        &kp SPACE     &trans        &trans     &kp SPACE     &trans
+            >;
+        };
+    };
 };
