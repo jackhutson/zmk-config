@@ -55,17 +55,6 @@
     combos {
         compatible = "zmk,combos";
 
-        TO_GAMING {
-            bindings = <&tog 5>;
-            key-positions = <37 38>;
-            layers = <0>;
-        };
-
-        gaming_off {
-            bindings = <&to 0>;
-            key-positions = <39 40>;
-            layers = <5>;
-        };
     };
 
     macros {
@@ -179,16 +168,6 @@
             >;
 
             label = "Function";
-        };
-
-        gaming_layer {
-            label = "GAME";
-            bindings = <
-&kp TAB    &kp Q  &kp W  &kp E    &kp R      &kp T      &kp Y      &kp U            &kp I             &kp O            &kp P               &kp BACKSLASH
-&kp LCTRL  &kp A  &kp S  &kp D    &kp F      &kp G      &kp H      &index RSHIFT J  &homerow RCTRL K  &homerow RALT L  &homerow RGUI SEMI  &kp SQT
-&kp LSHFT  &kp Z  &kp X  &kp C    &kp V      &kp B      &kp N      &kp M            &kp COMMA         &kp DOT          &kp SLASH           &kp RSHFT
-                         &kp DEL  &kp SPACE  &kp ESC    &kp ENTER  &kp BACKSPACE    &kp TAB
-            >;
         };
     };
 };
