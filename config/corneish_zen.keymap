@@ -91,7 +91,7 @@
         mac_shot: mac_shot {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp LS(LG(LC(N4)))>;
+            bindings = <&kp LC(LS(LG(N4)))>;
             label = "MAC_SHOT";
         };
     };
