@@ -29,12 +29,11 @@ include:
     shield: settings_reset
 
   # Charybdis Nano (nice!nano v2)
-  # Note: nice_nano@2.0.0 is the default, so just use nice_nano
-  - board: nice_nano
+  - board: nice_nano_v2
     shield: charybdis_nano_left
-  - board: nice_nano
+  - board: nice_nano_v2
     shield: charybdis_nano_right
-  - board: nice_nano
+  - board: nice_nano_v2
     shield: charybdis_nano_left settings_reset
-  - board: nice_nano
+  - board: nice_nano_v2
     shield: charybdis_nano_right settings_reset

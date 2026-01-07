@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: MIT
  *
  * Charybdis Nano Right Half (Peripheral)
- * This side has the PMW3610 trackball connected via SPI.
+ * This side has the PMW3610 trackball connected via 3-wire SPI.
  *
- * Trackball Pin Mappings:
- *   nCS  = P0.20 (D3)
- *   MOSI = P0.17 (D2)
- *   SCLK = P0.08 (D0)
- *   MISO = P0.06 (D1)
+ * Trackball Pin Mappings (PMW3610):
+ *   nCS    = P0.20 (D3)  - Chip Select
+ *   SDIO   = P0.17 (D2)  - Bidirectional data (MOSI/MISO on same pin)
+ *   SCLK   = P0.08 (D0)  - SPI Clock
+ *   MOTION = P0.06 (D1)  - Interrupt/IRQ (directly connected, no SPI)
  */
 
 #include "charybdis_nano.dtsi"
@@ -29,26 +29,32 @@
 /*
  * Column GPIO Configuration for Right Half
  * Same physical pins as left, but col-offset shifts to columns 5-9.
+ *
+ * Diode direction is row2col, so columns are inputs with pull-down.
  */
 &kscan0 {
     col-gpios
-        = <&gpio0 29 GPIO_ACTIVE_HIGH>  /* C2 = P0.29 (D20) -> col 5 */
-        , <&gpio0  9 GPIO_ACTIVE_HIGH>  /* C3 = P0.09 (D10) -> col 6 */
-        , <&gpio1  0 GPIO_ACTIVE_HIGH>  /* C4 = P1.00 (D6)  -> col 7 */
-        , <&gpio0 11 GPIO_ACTIVE_HIGH>  /* C5 = P0.11 (D7)  -> col 8 */
-        , <&gpio1  4 GPIO_ACTIVE_HIGH>  /* C6 = P1.04 (D8)  -> col 9 */
+        = <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C2 = P0.29 (D20) -> col 5 */
+        , <&gpio0  9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C3 = P0.09 (D10) -> col 6 */
+        , <&gpio1  0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C4 = P1.00 (D6)  -> col 7 */
+        , <&gpio0 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C5 = P0.11 (D7)  -> col 8 */
+        , <&gpio1  4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C6 = P1.04 (D8)  -> col 9 */
         ;
 };
 
 /*
  * SPI Pin Control Configuration for PMW3610 Trackball
+ *
+ * PMW3610 uses 3-wire SPI with bidirectional SDIO.
+ * MOSI and MISO are configured to the same pin (P0.17/D2) for bidirectional operation.
+ * The MOTION/IRQ signal uses P0.06 (D1) separately.
  */
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 8)>,   /* SCLK = P0.08 (D0) */
-                    <NRF_PSEL(SPIM_MOSI, 0, 17)>, /* MOSI = P0.17 (D2) */
-                    <NRF_PSEL(SPIM_MISO, 0, 6)>;  /* MISO = P0.06 (D1) */
+                    <NRF_PSEL(SPIM_MOSI, 0, 17)>, /* SDIO = P0.17 (D2) - bidirectional */
+                    <NRF_PSEL(SPIM_MISO, 0, 17)>; /* SDIO = P0.17 (D2) - same as MOSI */
         };
     };
 
@@ -56,7 +62,7 @@
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 8)>,
                     <NRF_PSEL(SPIM_MOSI, 0, 17)>,
-                    <NRF_PSEL(SPIM_MISO, 0, 6)>;
+                    <NRF_PSEL(SPIM_MISO, 0, 17)>;
             low-power-enable;
         };
     };
@@ -78,7 +84,7 @@
         compatible = "pixart,pmw3610-alt";
         reg = <0>;
         spi-max-frequency = <2000000>;
-        irq-gpios = <&gpio0 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;  /* IRQ on MISO pin */
+        irq-gpios = <&gpio0 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;  /* MOTION = P0.06 (D1) */
         cpi = <800>;
         evt-type = <INPUT_EV_REL>;
         x-input-code = <INPUT_REL_X>;
