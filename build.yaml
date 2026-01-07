@@ -18,9 +18,20 @@
 #
 ---
 include:
+  # Corneish Zen v2 (existing)
   - board: corneish_zen_v2_left
   - board: corneish_zen_v2_right
   - board: corneish_zen_v2_left
     shield: settings_reset
   - board: corneish_zen_v2_right
     shield: settings_reset
+
+  # Charybdis Nano (nice!nano v2)
+  - board: nice_nano_v2
+    shield: charybdis_nano_left
+  - board: nice_nano_v2
+    shield: charybdis_nano_right
+  - board: nice_nano_v2
+    shield: charybdis_nano_left settings_reset
+  - board: nice_nano_v2
+    shield: charybdis_nano_right settings_reset

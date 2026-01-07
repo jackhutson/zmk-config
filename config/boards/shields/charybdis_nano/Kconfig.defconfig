@@ -1,0 +1,35 @@
+# Copyright (c) 2024 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+if SHIELD_CHARYBDIS_NANO_LEFT
+
+config ZMK_KEYBOARD_NAME
+    default "Charybdis Nano"
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+endif # SHIELD_CHARYBDIS_NANO_LEFT
+
+if SHIELD_CHARYBDIS_NANO_LEFT || SHIELD_CHARYBDIS_NANO_RIGHT
+
+config ZMK_SPLIT
+    default y
+
+config ZMK_POINTING
+    default y
+
+endif # SHIELD_CHARYBDIS_NANO_LEFT || SHIELD_CHARYBDIS_NANO_RIGHT
+
+if SHIELD_CHARYBDIS_NANO_RIGHT
+
+config SPI
+    default y
+
+config INPUT
+    default y
+
+config PMW3610
+    default y
+
+endif # SHIELD_CHARYBDIS_NANO_RIGHT

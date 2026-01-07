@@ -1,0 +1,118 @@
+/*
+ * Copyright (c) 2024 The ZMK Contributors
+ * SPDX-License-Identifier: MIT
+ *
+ * Charybdis Nano Shield - Shared Configuration
+ *
+ * Matrix Layout (4 rows x 5 columns per half, columns C2-C6, no C1):
+ *
+ *   LEFT HALF                          RIGHT HALF
+ *   C2    C3    C4    C5    C6         C2    C3    C4    C5    C6
+ *  (col0)(col1)(col2)(col3)(col4)     (col5)(col6)(col7)(col8)(col9)
+ * +-----+-----+-----+-----+-----+    +-----+-----+-----+-----+-----+
+ * | 0,0 | 0,1 | 0,2 | 0,3 | 0,4 | R1 | 0,5 | 0,6 | 0,7 | 0,8 | 0,9 |
+ * +-----+-----+-----+-----+-----+    +-----+-----+-----+-----+-----+
+ * | 1,0 | 1,1 | 1,2 | 1,3 | 1,4 | R2 | 1,5 | 1,6 | 1,7 | 1,8 | 1,9 |
+ * +-----+-----+-----+-----+-----+    +-----+-----+-----+-----+-----+
+ * | 2,0 | 2,1 | 2,2 | 2,3 | 2,4 | R3 | 2,5 | 2,6 | 2,7 | 2,8 | 2,9 |
+ * +-----+-----+-----+-----+-----+    +-----+-----+-----+-----+-----+
+ * | 3,0 |     | 3,2 | 3,3 |     | R4 | 3,5 |     | 3,7 |     |     |
+ * +-----+     +-----+-----+           +-----+     +-----+
+ *   ^-- Left thumb: 3 keys              ^-- Right thumb: 2 keys (trackball at C5R4)
+ *       (C2R4, C4R4, C5R4)                  (C2R4, C4R4)
+ *
+ * Pin Mappings (nice_nano_v2 / Pro Micro footprint):
+ *   Rows:    R1=P0.31(D21), R2=P1.15(D18), R3=P0.24(D5), R4=P0.22(D4)
+ *   Columns: C2=P0.29(D20), C3=P0.09(D10), C4=P1.00(D6), C5=P0.11(D7), C6=P1.04(D8)
+ *
+ * Diode Direction: col2row (columns drive, rows sense)
+ *   To flip to row2col: change diode-direction and swap GPIO flags (see comments below)
+ */
+
+#include <dt-bindings/zmk/matrix_transform.h>
+
+/ {
+    chosen {
+        zmk,kscan = &kscan0;
+        zmk,matrix-transform = &default_transform;
+    };
+
+    /*
+     * Matrix Transform
+     * Maps physical switch positions to logical keymap positions.
+     * Total: 10 columns (5 left + 5 right), 4 rows
+     * Total keys: 35 (18 left + 17 right)
+     *
+     * The thumb row (R4) has gaps because not all column positions have keys:
+     * - Left:  C2R4=key, C3R4=none, C4R4=key, C5R4=key, C6R4=none
+     * - Right: C2R4=key, C3R4=none, C4R4=key, C5R4=trackball, C6R4=none
+     */
+    default_transform: keymap_transform_0 {
+        compatible = "zmk,matrix-transform";
+        columns = <10>;
+        rows = <4>;
+        map = <
+        /*       LEFT HALF (cols 0-4)                      RIGHT HALF (cols 5-9)          */
+        /*  C2      C3      C4      C5      C6        C2      C3      C4      C5      C6  */
+            RC(0,0) RC(0,1) RC(0,2) RC(0,3) RC(0,4)   RC(0,5) RC(0,6) RC(0,7) RC(0,8) RC(0,9)
+            RC(1,0) RC(1,1) RC(1,2) RC(1,3) RC(1,4)   RC(1,5) RC(1,6) RC(1,7) RC(1,8) RC(1,9)
+            RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4)   RC(2,5) RC(2,6) RC(2,7) RC(2,8) RC(2,9)
+            RC(3,0)         RC(3,2) RC(3,3)           RC(3,5)         RC(3,7)
+        >;
+    };
+
+    /*
+     * Kscan Configuration
+     * Row GPIOs are shared between both halves.
+     * Column GPIOs are specified per-half in the overlay files.
+     *
+     * Diode direction: col2row
+     *   - Columns are outputs (active high, no pull)
+     *   - Rows are inputs (active high with pull-down)
+     *
+     * To flip to row2col:
+     *   1. Change diode-direction to "row2col"
+     *   2. Row GPIOs: change to GPIO_ACTIVE_HIGH (remove GPIO_PULL_DOWN)
+     *   3. Col GPIOs: change to (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)
+     */
+    kscan0: kscan0 {
+        compatible = "zmk,kscan-gpio-matrix";
+        diode-direction = "col2row";
+        wakeup-source;
+
+        row-gpios
+            = <&gpio0 31 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R1 = P0.31 (D21) */
+            , <&gpio1 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R2 = P1.15 (D18) */
+            , <&gpio0 24 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R3 = P0.24 (D5)  */
+            , <&gpio0 22 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R4 = P0.22 (D4)  */
+            ;
+
+        /* col-gpios defined in left/right overlay files */
+    };
+
+    /*
+     * Input Split Configuration
+     * Used to relay trackball input from peripheral (right) to central (left).
+     * The trackball is physically connected to the right half.
+     */
+    split_inputs {
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        trackball_split: trackball_split@0 {
+            compatible = "zmk,input-split";
+            reg = <0>;
+        };
+    };
+
+    /*
+     * Trackball Input Listener
+     * Receives events from trackball_split on central side.
+     * Disabled by default; enabled in left overlay.
+     */
+    trackball_listener: trackball_listener {
+        compatible = "zmk,input-listener";
+        status = "disabled";
+        device = <&trackball_split>;
+    };
+};

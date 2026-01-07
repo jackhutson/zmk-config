@@ -1,0 +1,93 @@
+/*
+ * Copyright (c) 2024 The ZMK Contributors
+ * SPDX-License-Identifier: MIT
+ *
+ * Charybdis Nano Diagnostic Keymap
+ *
+ * This keymap is designed to make incorrect key mappings immediately obvious.
+ * Each key outputs a unique identifier based on its physical position.
+ *
+ * Physical Layout Reference (35 keys total):
+ *
+ *   LEFT HALF (18 keys)                         RIGHT HALF (17 keys)
+ *   +-----+-----+-----+-----+-----+            +-----+-----+-----+-----+-----+
+ *   |  Q  |  W  |  E  |  R  |  T  |  Row 1     |  Y  |  U  |  I  |  O  |  P  |
+ *   +-----+-----+-----+-----+-----+            +-----+-----+-----+-----+-----+
+ *   |  A  |  S  |  D  |  F  |  G  |  Row 2     |  H  |  J  |  K  |  L  |  ;  |
+ *   +-----+-----+-----+-----+-----+            +-----+-----+-----+-----+-----+
+ *   |  Z  |  X  |  C  |  V  |  B  |  Row 3     |  N  |  M  |  ,  |  .  |  /  |
+ *   +-----+-----+-----+-----+-----+            +-----+-----+-----+-----+-----+
+ *   |  1  |     |  2  | L1  |     |  Thumb    |  4  |     |  5  |     |     |
+ *   +-----+     +-----+-----+                  +-----+     +-----+   [BALL]
+ *
+ * Diagnostic Keys:
+ * - Main grid: Standard QWERTY letters (Q-P, A-;, Z-/)
+ * - Left thumbs (C2R4, C4R4, C5R4): 1, 2, Layer-1-hold
+ * - Right thumbs (C2R4, C4R4): 4, 5
+ * - Hold left inner thumb (L1) to access function layer
+ *
+ * If a key outputs the wrong character, the mapping is incorrect.
+ * Check the row/column GPIO assignments and matrix transform.
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/mouse.h>
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            display-name = "DIAG";
+            /*
+             * Diagnostic Layer - Unique key per position
+             *
+             * Position mapping (for debugging):
+             *   Positions 0-4:   Left row 1 (Q W E R T)
+             *   Positions 5-9:   Right row 1 (Y U I O P)
+             *   Positions 10-14: Left row 2 (A S D F G)
+             *   Positions 15-19: Right row 2 (H J K L ;)
+             *   Positions 20-24: Left row 3 (Z X C V B)
+             *   Positions 25-29: Right row 3 (N M , . /)
+             *   Positions 30-32: Left thumb (1 2 L1)
+             *   Positions 33-34: Right thumb (4 5)
+             */
+            bindings = <
+            /*  LEFT ROW 1                           RIGHT ROW 1                    */
+                &kp Q  &kp W  &kp E  &kp R  &kp T    &kp Y  &kp U  &kp I      &kp O    &kp P
+            /*  LEFT ROW 2                           RIGHT ROW 2                    */
+                &kp A  &kp S  &kp D  &kp F  &kp G    &kp H  &kp J  &kp K      &kp L    &kp SEMI
+            /*  LEFT ROW 3                           RIGHT ROW 3                    */
+                &kp Z  &kp X  &kp C  &kp V  &kp B    &kp N  &kp M  &kp COMMA  &kp DOT  &kp FSLH
+            /*  LEFT THUMB (C2, C4, C5)              RIGHT THUMB (C2, C4)           */
+                &kp N1        &kp N2 &mo 1           &kp N4        &kp N5
+            >;
+        };
+
+        function_layer {
+            display-name = "FUNC";
+            /*
+             * Function Layer - F-keys and system controls
+             * Access by holding left inner thumb key (position 32, mo 1)
+             *
+             * This layer helps verify:
+             * - All keys are reachable
+             * - Layer switching works
+             * - Bluetooth controls function
+             * - Modifier keys work
+             */
+            bindings = <
+            /*  LEFT ROW 1                                      RIGHT ROW 1                        */
+                &kp F1     &kp F2    &kp F3     &kp F4     &kp F5       &kp F6    &kp F7    &kp F8    &kp F9    &kp F10
+            /*  LEFT ROW 2                                      RIGHT ROW 2                        */
+                &kp LGUI   &kp LALT  &kp LCTRL  &kp LSHFT  &kp F11      &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &kp F12
+            /*  LEFT ROW 3                                      RIGHT ROW 3                        */
+                &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_CLR  &kp HOME  &kp PG_DN &kp PG_UP &kp END   &kp DEL
+            /*  LEFT THUMB                                      RIGHT THUMB                        */
+                &kp ESC           &kp TAB  &trans               &kp SPACE         &kp BSPC
+            >;
+        };
+    };
+};
