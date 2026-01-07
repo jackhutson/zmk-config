@@ -29,11 +29,12 @@ include:
     shield: settings_reset
 
   # Charybdis Nano (nice!nano v2)
-  - board: nice_nano_v2
+  # Note: Use "nice_nano" which defaults to v2 in Zephyr 4.x
+  - board: nice_nano
     shield: charybdis_nano_left
-  - board: nice_nano_v2
+  - board: nice_nano
     shield: charybdis_nano_right
-  - board: nice_nano_v2
+  - board: nice_nano
     shield: charybdis_nano_left settings_reset
-  - board: nice_nano_v2
+  - board: nice_nano
     shield: charybdis_nano_right settings_reset
