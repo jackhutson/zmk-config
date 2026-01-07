@@ -10,7 +10,7 @@
 
 /*
  * Column GPIO Configuration for Left Half
- * Columns C2-C6 directly wired to nice_nano_v2 pins.
+ * Columns C2-C6 directly wired to nice_nano pins.
  * No column offset needed for left half (it's columns 0-4).
  */
 &kscan0 {

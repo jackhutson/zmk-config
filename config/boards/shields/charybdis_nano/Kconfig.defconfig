@@ -29,7 +29,7 @@ config SPI
 config INPUT
     default y
 
-config PMW3610
+config PMW3610_ALT
     default y
 
 endif # SHIELD_CHARYBDIS_NANO_RIGHT

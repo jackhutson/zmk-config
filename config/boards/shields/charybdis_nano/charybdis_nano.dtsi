@@ -21,7 +21,7 @@
  *   ^-- Left thumb: 3 keys              ^-- Right thumb: 2 keys (trackball at C5R4)
  *       (C2R4, C4R4, C5R4)                  (C2R4, C4R4)
  *
- * Pin Mappings (nice_nano_v2 / Pro Micro footprint):
+ * Pin Mappings (nice_nano / Pro Micro footprint):
  *   Rows:    R1=P0.31(D21), R2=P1.15(D18), R3=P0.24(D5), R4=P0.22(D4)
  *   Columns: C2=P0.29(D20), C3=P0.09(D10), C4=P1.00(D6), C5=P0.11(D7), C6=P1.04(D8)
  *
