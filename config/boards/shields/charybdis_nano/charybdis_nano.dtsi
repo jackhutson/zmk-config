@@ -25,7 +25,7 @@
  *   Rows:    R1=P0.31(D21), R2=P1.15(D18), R3=P0.24(D5), R4=P0.22(D4)
  *   Columns: C2=P0.29(D20), C3=P0.09(D10), C4=P1.00(D6), C5=P0.11(D7), C6=P1.04(D8)
  *
- * Diode Direction: row2col (rows drive, columns sense)
+ * Diode Direction: col2row (columns drive, rows sense)
  */
 
 #include <dt-bindings/zmk/matrix_transform.h>
@@ -65,20 +65,20 @@
      * Row GPIOs are shared between both halves.
      * Column GPIOs are specified per-half in the overlay files.
      *
-     * Diode direction: row2col
-     *   - Rows are outputs (active high, no pull)
-     *   - Columns are inputs (active high with pull-down)
+     * Diode direction: col2row
+     *   - Columns are outputs (active high, no pull)
+     *   - Rows are inputs (active high with pull-down)
      */
     kscan0: kscan0 {
         compatible = "zmk,kscan-gpio-matrix";
-        diode-direction = "row2col";
+        diode-direction = "col2row";
         wakeup-source;
 
         row-gpios
-            = <&gpio0 31 GPIO_ACTIVE_HIGH>  /* R1 = P0.31 (D21) */
-            , <&gpio1 15 GPIO_ACTIVE_HIGH>  /* R2 = P1.15 (D18) */
-            , <&gpio0 24 GPIO_ACTIVE_HIGH>  /* R3 = P0.24 (D5)  */
-            , <&gpio0 22 GPIO_ACTIVE_HIGH>  /* R4 = P0.22 (D4)  */
+            = <&gpio0 31 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R1 = P0.31 (D21) */
+            , <&gpio1 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R2 = P1.15 (D18) */
+            , <&gpio0 24 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R3 = P0.24 (D5)  */
+            , <&gpio0 22 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R4 = P0.22 (D4)  */
             ;
 
         /* col-gpios defined in left/right overlay files */
