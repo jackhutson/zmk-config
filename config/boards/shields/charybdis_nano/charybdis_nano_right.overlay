@@ -14,6 +14,7 @@
 
 #include "charybdis_nano.dtsi"
 #include <dt-bindings/zmk/input_transform.h>
+#include <input/processors.dtsi>
 
 /*
  * Matrix Transform Column Offset
