@@ -28,17 +28,23 @@
 
 /*
  * Column GPIO Configuration for Right Half
- * Same physical pins as left, but col-offset shifts to columns 5-9.
+ * Same physical pins as left, but ORDER IS REVERSED because the PCB is mirrored.
+ * col-offset shifts to columns 5-9.
  *
  * Diode direction is row2col, so columns are inputs (with pull-down).
  */
 &kscan0 {
+    /*
+     * Column order is REVERSED from left half because the right PCB is
+     * physically mirrored. The leftmost physical column on right side
+     * corresponds to col 5 in the matrix.
+     */
     col-gpios
-        = <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C2 = P0.29 (D20) -> col 5 */
-        , <&gpio0  9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C3 = P0.09 (D10) -> col 6 */
+        = <&gpio1  4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C6 = P1.04 (D8)  -> col 5 (phys leftmost) */
+        , <&gpio0 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C5 = P0.11 (D7)  -> col 6 */
         , <&gpio1  0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C4 = P1.00 (D6)  -> col 7 */
-        , <&gpio0 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C5 = P0.11 (D7)  -> col 8 */
-        , <&gpio1  4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C6 = P1.04 (D8)  -> col 9 */
+        , <&gpio0  9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C3 = P0.09 (D10) -> col 8 */
+        , <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* C2 = P0.29 (D20) -> col 9 (phys rightmost) */
         ;
 };
 
