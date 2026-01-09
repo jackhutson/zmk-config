@@ -130,14 +130,12 @@
 /*
  * Temporary Layer Processor for Mouse Layer
  * Activates layer 5 (MOUSE) when trackball moves, deactivates after timeout.
- * Adjust timeout_ms to change how long layer stays active after movement stops.
+ * Usage: <&zip_mouse_layer LAYER_NUM TIMEOUT_MS>
  */
 / {
     zip_mouse_layer: zip_mouse_layer {
         compatible = "zmk,input-processor-temp-layer";
-        #input-processor-cells = <0>;
-        layer = <5>;
-        timeout-ms = <500>;
+        #input-processor-cells = <2>;
     };
 };
 
@@ -152,26 +150,27 @@
      */
 
     /* #1: No transform (0°) - TESTING */
-    input-processors = <&zip_mouse_layer>;
+    /* zip_mouse_layer params: layer 5, 500ms timeout */
+    input-processors = <&zip_mouse_layer 5 500>;
 
     /* #2: 90° rotation */
-    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform INPUT_TRANSFORM_XY_SWAP>;
+    // input-processors = <&zip_mouse_layer 5 500>, <&zip_xy_transform INPUT_TRANSFORM_XY_SWAP>;
 
     /* #3: 180° rotation */
-    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
+    // input-processors = <&zip_mouse_layer 5 500>, <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
 
     /* #4: 270° rotation */
-    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
+    // input-processors = <&zip_mouse_layer 5 500>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
 
     /* #5: X invert only */
-    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform INPUT_TRANSFORM_X_INVERT>;
+    // input-processors = <&zip_mouse_layer 5 500>, <&zip_xy_transform INPUT_TRANSFORM_X_INVERT>;
 
     /* #6: Y invert only */
-    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
+    // input-processors = <&zip_mouse_layer 5 500>, <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
 
     /* #7: 90° + X invert (was veering diagonally) */
-    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)>;
+    // input-processors = <&zip_mouse_layer 5 500>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)>;
 
     /* #8: 90° + Y invert */
-    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>;
+    // input-processors = <&zip_mouse_layer 5 500>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>;
 };
