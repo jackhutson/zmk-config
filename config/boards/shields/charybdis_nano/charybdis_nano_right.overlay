@@ -102,27 +102,76 @@
  * Configure Input Split for Trackball
  * This relays trackball events from peripheral to central.
  *
- * Axis transformations depend on physical trackball orientation.
- * Common adjustments (uncomment/modify as needed):
+ * TRACKBALL AXIS CALIBRATION
+ * ==========================
+ * If cursor moves diagonally when rolling straight, try each option below.
+ * Uncomment ONE option at a time, rebuild, and test.
  *
- *   No transformation:
- *     input-processors = <>;
+ * Test procedure:
+ *   1. Roll ball straight LEFT  → cursor should move purely left
+ *   2. Roll ball straight UP    → cursor should move purely up
+ *   3. If diagonal, try next option
  *
- *   Swap X/Y axes:
- *     input-processors = <&zip_xy_transform INPUT_TRANSFORM_XY_SWAP>;
+ * Options (effective rotation):
+ *   #1: 0°   - No transform
+ *   #2: 90°  - XY_SWAP
+ *   #3: 180° - X_INVERT | Y_INVERT
+ *   #4: 270° - XY_SWAP | X_INVERT | Y_INVERT
  *
- *   Invert X axis:
- *     input-processors = <&zip_xy_transform INPUT_TRANSFORM_X_INVERT>;
+ * If none of #1-#4 work, try adding/removing individual inversions:
+ *   #5: X_INVERT only
+ *   #6: Y_INVERT only
+ *   #7: XY_SWAP | X_INVERT
+ *   #8: XY_SWAP | Y_INVERT
  *
- *   Invert Y axis:
- *     input-processors = <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
- *
- *   Swap + Invert both (common for Charybdis orientation):
- *     input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
- *
- * The default below assumes standard Charybdis mounting; adjust if cursor moves wrong.
+ * If ALL 8 options still show diagonal movement, the sensor PCB
+ * needs to be physically rotated by ~45° increments.
  */
+/*
+ * Temporary Layer Processor for Mouse Layer
+ * Activates layer 5 (MOUSE) when trackball moves, deactivates after timeout.
+ * Adjust timeout_ms to change how long layer stays active after movement stops.
+ */
+/ {
+    zip_mouse_layer: zip_mouse_layer {
+        compatible = "zmk,input-processor-temp-layer";
+        #input-processor-cells = <0>;
+        layer = <5>;
+        timeout-ms = <500>;
+    };
+};
+
 &trackball_split {
     device = <&trackball>;
-    input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)>;
+
+    /*
+     * Input processors are chained: first temp-layer activation, then axis transform.
+     * The mouse layer (5) activates on any trackball movement.
+     *
+     * AXIS TRANSFORM OPTIONS - uncomment ONE transform line below:
+     */
+
+    /* #1: No transform (0°) - TESTING */
+    input-processors = <&zip_mouse_layer>, <>;
+
+    /* #2: 90° rotation */
+    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform INPUT_TRANSFORM_XY_SWAP>;
+
+    /* #3: 180° rotation */
+    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
+
+    /* #4: 270° rotation */
+    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
+
+    /* #5: X invert only */
+    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform INPUT_TRANSFORM_X_INVERT>;
+
+    /* #6: Y invert only */
+    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
+
+    /* #7: 90° + X invert (was veering diagonally) */
+    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)>;
+
+    /* #8: 90° + Y invert */
+    // input-processors = <&zip_mouse_layer>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>;
 };
