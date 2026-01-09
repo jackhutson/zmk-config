@@ -152,7 +152,7 @@
      */
 
     /* #1: No transform (0°) - TESTING */
-    input-processors = <&zip_mouse_layer>, <>;
+    input-processors = <&zip_mouse_layer>;
 
     /* #2: 90° rotation */
     // input-processors = <&zip_mouse_layer>, <&zip_xy_transform INPUT_TRANSFORM_XY_SWAP>;
