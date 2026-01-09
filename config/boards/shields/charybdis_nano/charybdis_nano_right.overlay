@@ -131,34 +131,34 @@
     device = <&trackball>;
 
     /*
-     * Input processors chain: first temp-layer activation, then axis transform.
-     * zip_temp_layer is a pre-defined ZMK processor: <&zip_temp_layer LAYER TIMEOUT_MS>
-     * The mouse layer (5) activates on any trackball movement for 500ms.
+     * Axis transform for trackball orientation.
+     * This runs on peripheral side (right) to correct X/Y axes before
+     * sending to central. Layer activation happens on central side.
      *
-     * AXIS TRANSFORM OPTIONS - uncomment ONE transform line below:
+     * AXIS TRANSFORM OPTIONS - uncomment ONE line below:
      */
 
     /* #1: No transform (0°) - TESTING */
-    input-processors = <&zip_temp_layer 5 500>;
+    /* input-processors omitted = no transform */
 
     /* #2: 90° rotation */
-    // input-processors = <&zip_temp_layer 5 500>, <&zip_xy_transform INPUT_TRANSFORM_XY_SWAP>;
+    // input-processors = <&zip_xy_transform INPUT_TRANSFORM_XY_SWAP>;
 
     /* #3: 180° rotation */
-    // input-processors = <&zip_temp_layer 5 500>, <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
+    // input-processors = <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
 
     /* #4: 270° rotation */
-    // input-processors = <&zip_temp_layer 5 500>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
+    // input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
 
     /* #5: X invert only */
-    // input-processors = <&zip_temp_layer 5 500>, <&zip_xy_transform INPUT_TRANSFORM_X_INVERT>;
+    // input-processors = <&zip_xy_transform INPUT_TRANSFORM_X_INVERT>;
 
     /* #6: Y invert only */
-    // input-processors = <&zip_temp_layer 5 500>, <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
+    // input-processors = <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
 
     /* #7: 90° + X invert (was veering diagonally) */
-    // input-processors = <&zip_temp_layer 5 500>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)>;
+    // input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)>;
 
     /* #8: 90° + Y invert */
-    // input-processors = <&zip_temp_layer 5 500>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>;
+    // input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>;
 };
