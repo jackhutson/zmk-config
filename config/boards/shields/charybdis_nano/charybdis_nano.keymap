@@ -15,7 +15,7 @@
  *   +-----+-----+-----+-----+-----+            +-----+-----+-----+-----+-----+
  *   |  Z  |  X  |  C  |  V  |  B  |  Row 3     |  N  |  M  |  ,  |  .  |  /  |
  *   +-----+-----+-----+-----+-----+            +-----+-----+-----+-----+-----+
- *   |ESC/4|     |BS/1 |ENT/2|     |  Thumb    | TAB |     |SPC/3|     |     |
+ *   |ESC/5|     |BS/1 |TAB/3|     |  Thumb    | ENT |     |SPC/2|     |     |
  *   +-----+     +-----+-----+                  +-----+     +-----+   [BALL]
  *
  * Layers:
@@ -24,7 +24,9 @@
  *   2 - SYM:    Symbols and brackets
  *   3 - NUM:    Numpad and operators
  *   4 - FUNC:   F-keys, Bluetooth, media
- *   5 - MOUSE:  Auto-activates when trackball moves (mouse buttons, scroll)
+ *   5 - MOUSE:  Hold ESC for mouse buttons + modifiers
+ *   6 - SCROLL: Trackball scroll mode (toggle from MOUSE layer)
+ *   7 - SNIPER: Slower trackball for precision (toggle from MOUSE layer)
  */
 
 #include <behaviors.dtsi>
@@ -133,6 +135,31 @@
         };
     };
 
+    combos {
+        compatible = "zmk,combos";
+
+        combo_caps_word {
+            timeout-ms = <50>;
+            key-positions = <13 16>; /* F + J */
+            layers = <0>;
+            bindings = <&caps_word>;
+        };
+
+        combo_delete {
+            timeout-ms = <50>;
+            key-positions = <31 32>; /* BSPC + TAB (left middle + left inner thumbs) */
+            layers = <0>;
+            bindings = <&kp DEL>;
+        };
+
+        combo_mouse_toggle {
+            timeout-ms = <40>;
+            key-positions = <33 34>; /* ENTER + SPACE */
+            layers = <0 5 6 7>;
+            bindings = <&tog 5>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -142,15 +169,16 @@
          *   Q       W       E       R       T          Y       U       I       O       P
          * A/GUI   S/ALT   D/CTL   F/SFT     G          H     J/SFT   K/CTL   L/ALT   ;/GUI
          *   Z       X       C       V       B          N       M       ,       .       /
-         *         ESC/4   BS/1    ENT/2               TAB    SPC/3
+         *         ESC/5   BS/1    TAB/3               ENT    SPC/2
          */
         default_layer {
             label = "BASE";
+            display-name = "BASE";
             bindings = <
                 &kp Q            &kp W            &kp E             &kp R            &kp T              &kp Y      &kp U            &kp I             &kp O            &kp P
                 &homerow LGUI A  &homerow LALT S  &homerow LCTRL D  &index LSHFT F   &kp G              &kp H      &index RSHFT J   &homerow RCTRL K  &homerow RALT L  &homerow RGUI SEMI
                 &kp Z            &kp X            &kp C             &kp V            &kp B              &kp N      &kp M            &kp COMMA         &kp DOT          &kp FSLH
-                &thumb 4 ESC                      &thumb 1 BSPC     &thumb 2 ENTER                      &kp TAB                     &thumb 3 SPACE
+                &thumb 5 ESC                      &thumb 1 BSPC     &thumb 3 TAB                        &kp ENTER                   &thumb 2 SPACE
             >;
         };
 
@@ -161,40 +189,42 @@
          * SHIFT   REDO    UNDO    BSPC    CUT        CUT    FIND   FIND<  FIND>  SHIFT
          *  GUI    ALT     CTL     SFT     COPY       COPY   LEFT    UP    DOWN   RIGHT
          * SELAL  SELLN   SELWD   SELNONE PASTE      PASTE  HOME   PGUP   PGDN    END
-         *         TOG1    ---    SCREEN            SELALL  SELWD
+         *         FUNC    ---    SCREEN            SELALL  SELWD
          */
         nav_layer {
             label = "NAV";
+            display-name = "NAV";
             bindings = <
                 &sk LSHIFT   &kp LC(LS(Z))  &kp LC(Z)     &kp BSPC       &kp LC(X)      &kp LC(X)    &kp LC(F)     &kp LC(LS(G))  &kp LC(G)    &sk RSHIFT
                 &kp LGUI     &kp LALT       &kp LCTRL     &kp LSHFT      &kp LC(C)      &kp LC(C)    &kp LEFT      &kp UP         &kp DOWN     &kp RIGHT
                 &select_all  &select_line   &select_word  &select_none   &kp LC(V)      &kp LC(V)    &kp HOME      &kp PG_UP      &kp PG_DN    &kp END
-                &tog 1                      &none         &mac_shot                     &select_all                &select_word
+                &tog 4                      &none         &mac_shot                     &select_all                &select_word
             >;
         };
 
         /*
-         * Layer 2: SYM - Symbols
-         * Access: Hold left inner thumb (ENTER)
+         * Layer 2: SYM - Symbols (TS/Go/Shell + Vim)
+         * Access: Hold right inner thumb (SPACE)
          *
-         *   !       {       [       ]       }          &       `       \       '       ~
-         *   #       ^       =       _       $          *     SHIFT    CTL     ALT     GUI
-         *   @       <       |       -       >          +      DEL    GRAVE   BSLH    SQT
-         *           %       (       ---                ---     ---
+         *   !       {       [       ]       }          `       \       &       "       #
+         *   ^       =       _       $       *          :       +       -       %       '
+         *   @       <       |       -       >          ~    REPEAT    /       .      DEL
+         *    (     BSPC     )                         ENT    SPC
          */
         sym_layer {
             label = "SYM";
+            display-name = "SYM";
             bindings = <
-                &kp EXCL   &kp LBRC   &kp LBKT   &kp RBKT   &kp RBRC       &kp AMPS   &kp GRAVE  &kp BSLH   &kp SQT    &kp TILDE
-                &kp HASH   &kp CARET  &kp EQUAL  &kp UNDER  &kp DLLR       &kp STAR   &kp RSHFT  &kp RCTRL  &kp RALT   &kp RGUI
-                &kp AT     &kp LT     &kp PIPE   &kp MINUS  &kp GT         &kp PLUS   &kp DEL    &kp GRAVE  &kp BSLH   &kp SQT
-                &kp PRCNT             &kp LPAR   &none                     &none                 &none
+                &kp EXCL        &kp LS(LBRC)  &kp LBKT   &kp RBKT   &kp LS(RBRC)   &kp GRAVE  &kp BSLH   &kp AMPS       &kp LS(SQT)  &kp HASH
+                &kp CARET       &kp EQUAL     &kp LS(MINUS) &kp DLLR  &kp STAR      &kp COLON  &kp PLUS   &kp MINUS      &kp PRCNT    &kp SQT
+                &kp AT          &kp LT        &kp PIPE   &kp MINUS  &kp GT         &kp TILDE  &key_repeat &kp FSLH      &kp DOT      &kp DEL
+                &kp LPAR        &trans        &kp RPAR                    &trans                &trans
             >;
         };
 
         /*
          * Layer 3: NUM - Number Pad
-         * Access: Hold right middle thumb (SPACE)
+         * Access: Hold left inner thumb (TAB)
          *
          *   ---     ---     ---     ---     ---         %       7       8       9       :
          *   GUI     ALT     CTL     SFT     ---         +       4       5       6       -
@@ -203,6 +233,7 @@
          */
         num_layer {
             label = "NUM";
+            display-name = "NUM";
             bindings = <
                 &none      &none      &none      &none      &none          &kp PRCNT  &kp N7     &kp N8     &kp N9     &kp COLON
                 &kp LGUI   &kp LALT   &kp LCTRL  &kp LSHFT  &none          &kp PLUS   &kp N4     &kp N5     &kp N6     &kp MINUS
@@ -213,7 +244,7 @@
 
         /*
          * Layer 4: FUNC - Function Keys, Bluetooth, Media
-         * Access: Hold left outer thumb (ESC)
+         * Access: Toggle from NAV (left thumb "FUNC")
          *
          *  BT0     BT1     BT2     BT3    BT_CLR       VOL+    F7      F8      F9      F10
          *  GUI     ALT     CTL     SFT     ---         VOL-    F4      F5      F6      F11
@@ -222,6 +253,7 @@
          */
         func_layer {
             label = "FUNC";
+            display-name = "FUNC";
             bindings = <
                 &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_CLR       &kp C_VOL_UP  &kp F7         &kp F8         &kp F9   &kp F10
                 &kp LGUI      &kp LALT      &kp LCTRL     &kp LSHFT     &none            &kp C_VOL_DN  &kp F4         &kp F5         &kp F6   &kp F11
@@ -231,25 +263,61 @@
         };
 
         /*
-         * Layer 5: MOUSE - Auto-activates when trackball moves
-         * Access: Automatic via trackball movement (500ms timeout)
+         * Layer 5: MOUSE - Mouse buttons + modifiers
+         * Access: Hold left outer thumb (ESC) or toggle (ENTER+SPACE)
          *
-         * This layer activates when you touch the trackball and deactivates
-         * after 500ms of no movement. Perfect for mouse buttons!
-         *
-         *  ---     ---     ---     ---     ---         ---     ---     ---     ---     ---
+         *  ---     ---     ---     ---     ---         ---     ---     ---     SNP     ---
          *  GUI     ALT     CTL     SFT     ---         ---     ---     ---     ---     ---
-         *  ---     ---     ---     ---     ---         ---     ---     ---     ---     ---
+         *  ---     ---     ---     ---     ---         SCRL   LCLK    RCLK    MCLK     ---
          *          ---    LCLK    RCLK               MCLK     ---
-         *
-         * Thumb positions become mouse buttons when trackball is active!
          */
         mouse_layer {
             label = "MOUSE";
+            display-name = "MOUSE";
             bindings = <
-                &trans     &trans     &trans     &trans     &trans         &trans     &trans     &trans     &trans     &trans
+                &trans     &trans     &trans     &trans     &trans         &trans     &trans     &trans     &tog 7     &trans
                 &kp LGUI   &kp LALT   &kp LCTRL  &kp LSHFT  &trans         &trans     &trans     &trans     &trans     &trans
-                &trans     &trans     &trans     &trans     &trans         &trans     &trans     &trans     &trans     &trans
+                &trans     &trans     &trans     &trans     &trans         &tog 6     &mkp LCLK  &mkp RCLK  &mkp MCLK  &trans
+                &trans                &mkp LCLK  &mkp RCLK                 &mkp MCLK             &trans
+            >;
+        };
+
+        /*
+         * Layer 6: SCROLL - Trackball scroll mode
+         * Access: Toggle from MOUSE layer (right hand "SCRL")
+         *
+         *  ---     ---     ---     ---     ---         ---     ---     ---     SNP     ---
+         *  GUI     ALT     CTL     SFT     ---         ---     ---     ---     ---     ---
+         *  ---     ---     ---     ---     ---         SCRL   LCLK    RCLK    MCLK     ---
+         *          ---    LCLK    RCLK               MCLK     ---
+         */
+        scroll_layer {
+            label = "SCROLL";
+            display-name = "SCROLL";
+            bindings = <
+                &trans     &trans     &trans     &trans     &trans         &trans     &trans     &trans     &tog 7     &trans
+                &kp LGUI   &kp LALT   &kp LCTRL  &kp LSHFT  &trans         &trans     &trans     &trans     &trans     &trans
+                &trans     &trans     &trans     &trans     &trans         &tog 6     &mkp LCLK  &mkp RCLK  &mkp MCLK  &trans
+                &trans                &mkp LCLK  &mkp RCLK                 &mkp MCLK             &trans
+            >;
+        };
+
+        /*
+         * Layer 7: SNIPER - Precision trackball mode (slower)
+         * Access: Toggle from MOUSE layer (right hand "SNP")
+         *
+         *  ---     ---     ---     ---     ---         ---     ---     ---     SNP     ---
+         *  GUI     ALT     CTL     SFT     ---         ---     ---     ---     ---     ---
+         *  ---     ---     ---     ---     ---         SCRL   LCLK    RCLK    MCLK     ---
+         *          ---    LCLK    RCLK               MCLK     ---
+         */
+        sniper_layer {
+            label = "SNIPER";
+            display-name = "SNIPER";
+            bindings = <
+                &trans     &trans     &trans     &trans     &trans         &trans     &trans     &trans     &tog 7     &trans
+                &kp LGUI   &kp LALT   &kp LCTRL  &kp LSHFT  &trans         &trans     &trans     &trans     &trans     &trans
+                &trans     &trans     &trans     &trans     &trans         &tog 6     &mkp LCLK  &mkp RCLK  &mkp MCLK  &trans
                 &trans                &mkp LCLK  &mkp RCLK                 &mkp MCLK             &trans
             >;
         };

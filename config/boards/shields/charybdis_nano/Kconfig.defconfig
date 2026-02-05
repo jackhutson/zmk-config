@@ -11,6 +11,28 @@ config ZMK_SPLIT_ROLE_CENTRAL
 
 endif # SHIELD_CHARYBDIS_NANO_LEFT
 
+if SHIELD_CHARYBDIS_NANO_DONGLE
+
+config ZMK_KEYBOARD_NAME
+    default "Charybdis Nano Dongle"
+
+config ZMK_SPLIT
+    default y
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+config ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS
+    default 2
+
+config BT_MAX_CONN
+    default 6
+
+config BT_MAX_PAIRED
+    default 6
+
+endif # SHIELD_CHARYBDIS_NANO_DONGLE
+
 if SHIELD_CHARYBDIS_NANO_LEFT || SHIELD_CHARYBDIS_NANO_RIGHT
 
 config ZMK_SPLIT
