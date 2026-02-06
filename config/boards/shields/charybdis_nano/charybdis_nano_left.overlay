@@ -7,6 +7,7 @@
  */
 
 #include "charybdis_nano.dtsi"
+#include <dt-bindings/zmk/input_transform.h>
 #include <input/processors.dtsi>
 
 /*
@@ -35,6 +36,8 @@
  */
 &trackball_listener {
     status = "okay";
+    /* Apply baseline axis correction on central side. */
+    input-processors = <&zip_xy_transform INPUT_TRANSFORM_XY_SWAP>;
     scroller {
         layers = <6>;
         input-processors = <&zip_xy_to_scroll_mapper>;

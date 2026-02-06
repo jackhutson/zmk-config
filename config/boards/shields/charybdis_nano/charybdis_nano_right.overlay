@@ -141,8 +141,8 @@
     /* #1: No transform (0°) */
     /* input-processors omitted = no transform */
 
-    /* #2: XY swap (matches up->right/right->up misalignment) */
-    input-processors = <&zip_xy_transform INPUT_TRANSFORM_XY_SWAP>;
+    /* #2: XY swap */
+    // input-processors = <&zip_xy_transform INPUT_TRANSFORM_XY_SWAP>;
 
     /* #3: 180° rotation */
     // input-processors = <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
