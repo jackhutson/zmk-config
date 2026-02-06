@@ -10,5 +10,6 @@ features:
   - trackball
 siblings:
   - charybdis_nano_left
+  - charybdis_nano_left_peripheral
   - charybdis_nano_right
   - charybdis_nano_dongle

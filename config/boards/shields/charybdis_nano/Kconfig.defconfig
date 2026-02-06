@@ -11,6 +11,22 @@ config ZMK_SPLIT_ROLE_CENTRAL
 
 endif # SHIELD_CHARYBDIS_NANO_LEFT
 
+if SHIELD_CHARYBDIS_NANO_LEFT_PERIPHERAL
+
+config ZMK_KEYBOARD_NAME
+    default "Charybdis Nano"
+
+config ZMK_SPLIT
+    default y
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default n
+
+config ZMK_POINTING
+    default n
+
+endif # SHIELD_CHARYBDIS_NANO_LEFT_PERIPHERAL
+
 if SHIELD_CHARYBDIS_NANO_DONGLE
 
 config ZMK_KEYBOARD_NAME

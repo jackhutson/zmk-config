@@ -31,8 +31,8 @@ include:
   # Charybdis Nano (nice!nano v2)
   # Note: Use "nice_nano" which defaults to v2 in Zephyr 4.x
   - board: nice_nano
-    shield: charybdis_nano_left
-    cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n -DCONFIG_ZMK_POINTING=n
+    shield: charybdis_nano_left_peripheral
+    artifact-name: charybdis_nano_left_peripheral
   - board: nice_nano
     shield: charybdis_nano_right
     cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
