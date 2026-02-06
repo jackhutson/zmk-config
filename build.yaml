@@ -32,7 +32,7 @@ include:
   # Note: Use "nice_nano" which defaults to v2 in Zephyr 4.x
   - board: nice_nano
     shield: charybdis_nano_left
-    cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
+    cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n -DCONFIG_ZMK_POINTING=n
   - board: nice_nano
     shield: charybdis_nano_right
     cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
@@ -45,4 +45,4 @@ include:
   - board: xiao_ble
     shield: charybdis_nano_dongle prospector_adapter
   - board: xiao_ble
-    shield: charybdis_nano_dongle prospector_adapter settings_reset
+    shield: charybdis_nano_dongle settings_reset
