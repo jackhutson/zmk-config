@@ -208,7 +208,7 @@
          *
          *   !       {       [       ]       }          `       \       &       "       #
          *   ^       =       _       $       *          :       +       -       %       '
-         *   @       <       |       -       >          ~    REPEAT    /       .      DEL
+         *   @       <       |       -       >        REPEAT   ~       /       .      DEL
          *    (     BSPC     )                         ENT    SPC
          */
         sym_layer {
@@ -217,7 +217,7 @@
             bindings = <
                 &kp EXCL        &kp LS(LBRC)  &kp LBKT   &kp RBKT   &kp LS(RBRC)   &kp GRAVE  &kp BSLH   &kp AMPS       &kp LS(SQT)  &kp HASH
                 &kp CARET       &kp EQUAL     &kp LS(MINUS) &kp DLLR  &kp STAR      &kp COLON  &kp PLUS   &kp MINUS      &kp PRCNT    &kp SQT
-                &kp AT          &kp LT        &kp PIPE   &kp MINUS  &kp GT         &kp TILDE  &key_repeat &kp FSLH      &kp DOT      &kp DEL
+                &kp AT          &kp LT        &kp PIPE   &kp MINUS  &kp GT         &key_repeat &kp TILDE  &kp FSLH      &kp DOT      &kp DEL
                 &kp LPAR        &trans        &kp RPAR                    &trans                &trans
             >;
         };
@@ -249,7 +249,7 @@
          *  BT0     BT1     BT2     BT3    BT_CLR       VOL+    F7      F8      F9      F10
          *  GUI     ALT     CTL     SFT     ---         VOL-    F4      F5      F6      F11
          * CAPS    SELAL   SELLN   SELWD   SELNONE      MUTE    F1      F2      F3      F12
-         *          ---     ---     ---               SCREEN  ZOOM-
+         *  EXIT    ---     ---     ---               SCREEN  ZOOM-
          */
         func_layer {
             label = "FUNC";
@@ -258,7 +258,7 @@
                 &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_CLR       &kp C_VOL_UP  &kp F7         &kp F8         &kp F9   &kp F10
                 &kp LGUI      &kp LALT      &kp LCTRL     &kp LSHFT     &none            &kp C_VOL_DN  &kp F4         &kp F5         &kp F6   &kp F11
                 &kp CAPS      &select_all   &select_line  &select_word  &select_none     &kp C_MUTE    &kp F1         &kp F2         &kp F3   &kp F12
-                &none                       &none         &none                          &mac_shot                    &kp LC(MINUS)
+                &tog 4                      &none         &none                          &mac_shot                    &kp LC(MINUS)
             >;
         };
 
