@@ -18,16 +18,6 @@
 #
 ---
 include:
-  # Corneish Zen v2 (existing)
-  # Note: Board naming changed in Zephyr 4.x - now uses revision syntax
-  # corneish_zen_left@2.0.0 is the default, so just use corneish_zen_left
-  - board: corneish_zen_left
-  - board: corneish_zen_right
-  - board: corneish_zen_left
-    shield: settings_reset
-  - board: corneish_zen_right
-    shield: settings_reset
-
   # Charybdis Nano (nice!nano v2)
   # Note: Use "nice_nano" which defaults to v2 in Zephyr 4.x
   - board: nice_nano
